@@ -84,4 +84,17 @@ class CellTest < MiniTest::Test
 
     assert_equal "S", @cell_2.render(true)
   end
+
+  def test_render_shows_hit
+    @cell_2.place_ship(@cruiser)
+    @cell_2.fire_upon
+
+    assert_equal "H", @cell_2.render
+  end
+
+  def test_sunk_defaults_to_false
+
+    refute @cruiser.sunk?
+  end
+
 end
