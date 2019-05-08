@@ -30,4 +30,11 @@ class Cell
      @render = "M"
     end
   end
+
+  def render(reveal = false)
+    if reveal == true
+      @render = "S"
+    else @render
+    end
+  end
 end
