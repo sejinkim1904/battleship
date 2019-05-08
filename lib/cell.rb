@@ -1,5 +1,5 @@
 class Cell
-  attr_reader :coordinate, :ship, :empty, :fired_upon, :render, :sunk
+  attr_reader :coordinate, :ship, :empty, :fired_upon, :render
 
   def initialize(coordinate)
     @coordinate = coordinate
@@ -7,7 +7,6 @@ class Cell
     @ship = ship
     @fired_upon = false
     @render = "."
-    @sunk = false
   end
 
   def empty?
@@ -28,15 +27,55 @@ class Cell
     if @empty == false
      @ship.hit
      @render = "H"
-    else
-     @render = "M"
+    # else
+    #  @render = "M"
     end
   end
 
   def render(reveal = false)
-    if reveal == true
-      @render = "S"
-    else @render
+    if @ship
+      if reveal
+        if @ship.sunk?
+          @render = "X"
+        elsif @ship.health != @ship.length
+          @render = "H"
+        else
+          @render = "S"
+        end
+      else
+        if @ship.sunk?
+          @render = "X"
+        elsif @ship.health != @ship.length
+          @render = "H"
+        else
+          @render = "."
+        end
+      end
+    else
+      if reveal
+        if @fired_upon
+          @render = "M"
+        else
+          @render = "."
+        end
+      else
+        if @fired_upon
+          @render = "M"
+        else
+          @render = "."
+        end
+      end
     end
   end
 end
+
+
+  #   if reveal && @ship
+  #     @render = "S"
+  #   elsif @fired_upon && !@ship
+  #     @render = "M"
+  #   elsif @ship.sunk?
+  #     @render = "X"
+  #   else
+  #     @render
+  #   end
