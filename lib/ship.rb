@@ -13,5 +13,6 @@ class Ship
 
   def hit
     @health -= 1
+    @health = 0 if @health < 0
   end
 end
