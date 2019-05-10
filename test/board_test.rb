@@ -9,7 +9,8 @@ require 'pry'
 class BoardTest < MiniTest::Test
   def setup
     @board = Board.new
-
+    @cruiser = Ship.new("Cruiser", 3)
+    @submarine = Ship.new("Submarine", 2)
   end
 
   def test_board_exists
@@ -25,4 +26,15 @@ class BoardTest < MiniTest::Test
     refute @board.validate_coordinate?("E1")
     refute @board.validate_coordinate?("A22")
   end
+
+  def test_ship_has_valid_placement
+
+    refute @board.valid_placement?(@cruiser, ["A1", "A2"])
+    assert @board.valid_placement?(@cruiser, ["A1", "A2", "A3"])
+    refute @board.valid_placement?(@submarine, ["A2", "A3", "A4"])
+    refute @board.valid_placement?(@cruiser, ["A1", "A2", "A4"])
+
+  end
+
+
 end
