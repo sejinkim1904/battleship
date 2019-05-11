@@ -6,7 +6,7 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    if coordinates.length == ship.length
+    if coordinates.length == ship.length && coordinates.all? {|coordinate| @cells[coordinate].empty?}
       letter_by_itself = coordinates.map { |coordinate| coordinate[0] }
       number_by_itself = coordinates.map { |coordinate| coordinate[1].to_i }
       if letter_by_itself.uniq.length == 1
