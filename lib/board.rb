@@ -34,22 +34,11 @@ class Board
     grid
   end
 
+
+  def place(ship,coordinates)
+    coordinates.each do |coordinate|
+    @cells[coordinate].place_ship(ship)
+    end
+  end
+
 end
-
-
-
-
-
-
-# def cells
-#   file = File.open(filename, "r")
-#   coordinates = {}
-#   file.each_line do |line|
-#     coordinates.push(line)
-#   end
-#   cells = {}
-#   coordinates.each do |coordinate|
-#     cells.push(Cell.new(coordinate.first))
-#   end
-#   cells
-# end
