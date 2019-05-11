@@ -41,4 +41,27 @@ class Board
     end
   end
 
-end
+  def render
+    number_string = []
+    letter_and_numbers = @cells.keys.map do |key|
+      number_string.push(key[1])
+    end
+    # " #{number_string.uniq.join(" ")} \n"
+
+    numbers = letter_and_numbers.flatten.uniq
+    render_string = ""
+    numbers.each do |number|
+      render_string += "#{number}. . .\n"
+    end
+
+    render_string
+
+    #
+    # "#{@cell.keys[0][0]} #{@board.cells["A1"].render} #{@board.cells["B1"].render} #{@board.cells["C1"].render} #{@board.cells["D1"].render} \n"
+    # letter_string = []
+    # @cells.keys.map do |key|
+    #   letter_string.push(key[0])
+
+  
+    end
+  end
