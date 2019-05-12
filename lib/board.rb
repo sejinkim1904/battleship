@@ -43,25 +43,41 @@ class Board
 
   def render
     number_string = []
-    letter_and_numbers = @cells.keys.map do |key|
+    key_numbers = @cells.keys.map do |key|
       number_string.push(key[1])
     end
-    # " #{number_string.uniq.join(" ")} \n"
+    number_header = " #{number_string.uniq.join(" ")} \n"
 
-    numbers = letter_and_numbers.flatten.uniq
-    render_string = ""
+    numbers = key_numbers.flatten.uniq
+
+    letter_header = ""
+    key_renders = ""
     numbers.each do |number|
-      render_string += "#{number}. . .\n"
+      letter_header += "#{(number.to_i + 64).chr} . . . . \n"
     end
 
-    render_string
-
     #
-    # "#{@cell.keys[0][0]} #{@board.cells["A1"].render} #{@board.cells["B1"].render} #{@board.cells["C1"].render} #{@board.cells["D1"].render} \n"
-    # letter_string = []
-    # @cells.keys.map do |key|
-    #   letter_string.push(key[0])
+    # @cells.keys.each do |key|
+    #   key[0] == letter_header
 
-  
+
+
+
+
+
+
+
+
+
+
+ #      key_render = letter_header.map do |line|
+ # @cells.keys.[0] == letter_header[0]
+ #        letter_header += " #{key_render}"
+ #
+ #
+ #      key_renders {@cells.keys.map{ |key| key[0].ord == letter_header[0].ord}}
+
+
+    " #{number_header}" + "#{letter_header}"
     end
   end
