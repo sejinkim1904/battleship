@@ -1,12 +1,14 @@
 class Board
-  attr_reader :cells
+  attr_reader :cells, :numbers, :letters
 
   def initialize
+    @numbers = []
+    @letters = []
     @cells = build_grid
   end
 
   def valid_placement?(ship, coordinates)
-    if coordinates.length == ship.length
+    if coordinates.length == ship.length && coordinates.all? {|coordinate| @cells[coordinate].empty?}
       letter_by_itself = coordinates.map { |coordinate| coordinate[0] }
       number_by_itself = coordinates.map { |coordinate| coordinate[1].to_i }
       if letter_by_itself.uniq.length == 1
@@ -22,11 +24,13 @@ class Board
       key == coordinate
     end
   end
-
   def build_grid
+
     grid = {}
     ('A'..'D').each do |letter|
       (1..4).each do |num|
+        @letters << letter
+        @numbers << num
         coordinates = "#{letter}#{num}"
         grid[coordinates] = Cell.new(coordinates)
       end
@@ -34,22 +38,22 @@ class Board
     grid
   end
 
+  def place(ship,coordinates)
+    coordinates.each do |coordinate|
+    @cells[coordinate].place_ship(ship)
+    end
+  end
+
+  def render(reveal = false)
+    board = "  #{@numbers.uniq.join(" ")} \n"
+    letter_lines = ""
+    @letters.uniq.each do |letter|
+    letter_lines += "#{letter}"
+      @numbers.uniq.each do |number|
+        letter_lines += " #{@cells["#{letter}#{number}"].render(reveal)}"
+      end
+      letter_lines += " \n"
+    end
+      board << letter_lines
+  end
 end
-
-
-
-
-
-
-# def cells
-#   file = File.open(filename, "r")
-#   coordinates = {}
-#   file.each_line do |line|
-#     coordinates.push(line)
-#   end
-#   cells = {}
-#   coordinates.each do |coordinate|
-#     cells.push(Cell.new(coordinate.first))
-#   end
-#   cells
-# end
