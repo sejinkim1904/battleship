@@ -1,10 +1,11 @@
 class Board
-  attr_reader :cells, :numbers, :letters
+  attr_reader :name, :cells, :numbers, :letters
 
-  def initialize
+  def initialize(name, board_size)
+    @name = name
     @numbers = []
     @letters = []
-    @cells = build_grid
+    @cells = build_grid(board_size)
   end
 
   def valid_placement?(ship, coordinates)
@@ -24,11 +25,11 @@ class Board
       key == coordinate
     end
   end
-  def build_grid
 
+  def build_grid(num)
     grid = {}
-    ('A'..'D').each do |letter|
-      (1..4).each do |num|
+    ("A".."#{(num + 64).chr}").each do |letter|
+      (1..num).each do |num|
         @letters << letter
         @numbers << num
         coordinates = "#{letter}#{num}"
