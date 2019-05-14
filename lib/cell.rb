@@ -1,5 +1,5 @@
 class Cell
-  attr_reader :coordinate, :ship, :empty, :fired_upon, :render, :place_ship
+  attr_reader :coordinate, :ship, :empty, :fired_upon, :render, :fire_upon, :place_ship
 
 
   def initialize(coordinate)
@@ -27,9 +27,8 @@ class Cell
     @fired_upon = true
     if @empty == false
      @ship.hit
-     @render = "H"
-  
     end
+    render
   end
 
   def render(reveal = false)
