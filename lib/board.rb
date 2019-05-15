@@ -6,6 +6,7 @@ class Board
     @numbers = []
     @letters = []
     @cells = build_grid(board_size)
+    @ships = []
   end
 
   def valid_placement?(ship, coordinates)
@@ -43,6 +44,14 @@ class Board
     coordinates.each do |coordinate|
     @cells[coordinate].place_ship(ship)
     end
+      @ships << ship
+  end
+
+  def all_ships_sunk?
+    @ships.all? do |ship|
+      ship.sunk? 
+    end
+
   end
 
   def render(reveal = false)
