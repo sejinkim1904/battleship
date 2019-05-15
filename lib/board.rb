@@ -1,7 +1,7 @@
 class Board
   attr_reader :name, :cells, :numbers, :letters
 
-  def initialize(name, board_size)
+  def initialize(name = nil, board_size = nil)
     @name = name
     @numbers = []
     @letters = []
