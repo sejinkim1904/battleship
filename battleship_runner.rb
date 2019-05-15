@@ -20,7 +20,8 @@ end
 
 puts box_intro
 intro = gets.strip
-if intro.empty?
+# if intro.empty?
+def play
 
   puts "what is your name?"
   name = gets.chomp.capitalize
@@ -70,26 +71,63 @@ if intro.empty?
   puts @line
 
   puts "Jarvis has placed ships, pick a coordinate to fire upon"
-
+  #Computer places cruiser
   cpu_ship_coordinates_1 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
   cpu_ship_coordinates_2 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
   cpu_ship_coordinates_3 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
-  cpu_random_coordinates = cpu_ship_coordinates_1,cpu_ship_coordinates_2,cpu_ship_coordinates_3
-  until cpu_random_coordinates.all? { |coord| user_board.validate_coordinate?(coord) } && cpu_board.valid_placement?(@cruiser, cpu_random_coordinates)
-     puts "jarvis cant right now"
+  cpu_random_coordinates_3 = cpu_ship_coordinates_1,cpu_ship_coordinates_2,cpu_ship_coordinates_3
+  until cpu_random_coordinates_3.all? { |coord| user_board.validate_coordinate?(coord) } && cpu_board.valid_placement?(@cruiser, cpu_random_coordinates_3)
+
      cpu_ship_coordinates_1 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
      cpu_ship_coordinates_2 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
      cpu_ship_coordinates_3 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
-     cpu_random_coordinates = cpu_ship_coordinates_1,cpu_ship_coordinates_2,cpu_ship_coordinates_3
-
-
+     cpu_random_coordinates_3 = cpu_ship_coordinates_1,cpu_ship_coordinates_2,cpu_ship_coordinates_3
   end
 
-    cpu_board.place(@cruiser, cpu_random_coordinates)
+  cpu_board.place(@cruiser, cpu_random_coordinates_3)
 
+  #Computer places submarine
+  cpu_ship_coordinates_1 = "#{((rand(1..board_size)) +64).chr}#{(rand(1..board_size))}"
+  cpu_ship_coordinates_2 = "#{((rand(1..board_size)) +64).chr}#{(rand(1..board_size))}"
+  cpu_random_coordinates_2 =cpu_ship_coordinates_1,cpu_ship_coordinates_2
+  until cpu_random_coordinates_2.all? { |coord| user_board.validate_coordinate?(coord) } && cpu_board.valid_placement?(@submarine, cpu_random_coordinates_2)
+
+
+      cpu_ship_coordinates_1 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
+      cpu_ship_coordinates_2 = "#{((rand(1..board_size)) + 64).chr}#{(rand(1..board_size))}"
+      cpu_random_coordinates_2 = cpu_ship_coordinates_1,cpu_ship_coordinates_2
+   end
+
+  cpu_board.place(@submarine, cpu_random_coordinates_2)
+
+  puts cpu_board.render(true)
+
+  puts @line
+
+  unless player_board.all_ships_sunk? || cpu_board.all_ships_sunk?
+    player_turn
+    cpu_turn
+  end
+
+  def player_turn
+    shot = gets.chomp.upcase
+    cpu_board.cells[shot].fire_upon
     puts cpu_board.render(true)
+  end
 
-
-
-
+  def cpu_turn
+    cpu_shot = generate_random_number
+    player_board.cells[shot].fire_upon
+    puts player_board.render(true)
+  end
 end
+
+# create player class which takes in name and ship placements and has a
+# take_turn method
+
+
+play
+#
+# player turn
+# cpu turn
+# ships.sunk?
