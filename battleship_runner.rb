@@ -113,7 +113,7 @@ def play
     end
     @user_board.cells[cpu_shot].fire_upon
     puts "========Jarvis's board========"
-    puts @cpu_board.render(true)
+    puts @cpu_board.render
     puts @line
     puts "Enter a coordinate on Jarvis' board to fire upon."
     puts @line
