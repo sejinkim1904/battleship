@@ -36,15 +36,15 @@ class Cell
       if reveal
         if @ship.sunk?
           @render = "X"
-        elsif @ship.health != @ship.length
-          @render = "H"
+        elsif @fired_upon
+          return "H"
         else
           @render = "S"
         end
       else
         if @ship.sunk?
           @render = "X"
-        elsif @ship.health != @ship.length
+        elsif @fired_upon
           @render = "H"
         else
           @render = "."
