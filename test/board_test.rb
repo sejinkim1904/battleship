@@ -8,7 +8,7 @@ require 'pry'
 
 class BoardTest < MiniTest::Test
   def setup
-    @board = Board.new
+    @board = Board.new("board", 4)
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
 
@@ -17,6 +17,11 @@ class BoardTest < MiniTest::Test
   def test_board_exists
 
     assert_instance_of Board, @board
+  end
+
+  def test_board_has_a_name
+
+    assert_equal "board", @board.name
   end
 
   def test_board_has_cells
@@ -41,6 +46,7 @@ class BoardTest < MiniTest::Test
     refute @board.valid_placement?(@submarine, ["C2", "D3"])
     assert @board.valid_placement?(@submarine, ["A1", "A2"])
     assert @board.valid_placement?(@cruiser, ["B1", "C1", "D1"])
+    refute @board.valid_placement?(@cruiser, ["A1", "C4", "D3"])
   end
 
   def test_placing_ship
@@ -57,7 +63,7 @@ class BoardTest < MiniTest::Test
 
   def test_for_overlapping_ship
     @board.place(@cruiser, ["A1", "A2", "A3"])
-    
+
     refute @board.valid_placement?(@submarine, ["A1", "B1"])
   end
 
