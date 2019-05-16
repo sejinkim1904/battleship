@@ -1,5 +1,5 @@
 class Board
-  attr_reader :name, :cells, :numbers, :letters
+  attr_reader :name, :cells, :numbers, :letters, :ships
 
   def initialize(name = nil, board_size = nil)
     @name = name
@@ -10,6 +10,12 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
+    are_they_valid = coordinates.all? do |coord|
+      validate_coordinate?(coord)
+    end
+    if are_they_valid == false
+      return false
+    end
     if coordinates.length == ship.length && coordinates.all? {|coordinate| @cells[coordinate].empty?}
       letter_by_itself = coordinates.map { |coordinate| coordinate[0] }
       number_by_itself = coordinates.map { |coordinate| coordinate[1].to_i }
@@ -41,17 +47,20 @@ class Board
   end
 
   def place(ship,coordinates)
+    if !valid_placement?(ship,coordinates)
+      return nil
+    end
     coordinates.each do |coordinate|
     @cells[coordinate].place_ship(ship)
     end
-      @ships << ship
+    @ships << ship
+    ship
   end
 
   def all_ships_sunk?
     @ships.all? do |ship|
-      ship.sunk? 
+      ship.sunk?
     end
-
   end
 
   def render(reveal = false)
