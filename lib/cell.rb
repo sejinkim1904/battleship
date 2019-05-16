@@ -37,7 +37,7 @@ class Cell
         if @ship.sunk?
           @render = "X"
         elsif @fired_upon
-          return "H"
+          @render = "H"
         else
           @render = "S"
         end

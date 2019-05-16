@@ -5,28 +5,41 @@ require './lib/ship_placer'
 require 'tty-box'
 require 'pry'
 
-@cruiser = Ship.new("Cruiser", 3)
-@submarine = Ship.new("Submarine", 2)
-@line = "__________________________________"
-@ship_placer = ShipPlacer.new
+def setup
+  @cruiser = Ship.new("Cruiser", 3)
+  @submarine = Ship.new("Submarine", 2)
+  @cpu_cruiser = Ship.new("Cruiser", 3)
+  @cpu_submarine = Ship.new("Submarine", 2)
+  @line = "***************************************************"
+  @ship_placer = ShipPlacer.new
+end
 
-box_intro = TTY::Box.frame(
+@box_intro = TTY::Box.frame(
   width: 50,
   height: 15,
   align: :center,
   padding: 4,
   title: {top_left: 'BATTLESHIP with Ruby'}
-) do
-  "Welcome\nto\nBATTLESHIP\nPress Enter to play"
+  ) do
+    "Welcome\nto\nBATTLESHIP\nPress Enter to play"
+  end
+
+def main_menu
+  puts `clear`
+  puts @box_intro
+  intro = gets.strip
+  if intro.empty?
+    play
+  else
+    return
+  end
 end
 
-puts box_intro
-intro = gets.strip
-if intro.empty?
-
-  puts "what is your name?"
+def play
+  puts `clear`
+  setup
+  puts "What is your name?"
   @name = gets.chomp.capitalize
-
   puts "#{@name} please enter a board size between 4 and 9:"
   @board_size = gets.chomp.to_i
   until @board_size  <= 9 && @board_size >= 4
@@ -39,16 +52,18 @@ if intro.empty?
   @cpu_board.cells
 
   puts `clear`
-  puts "Prepare for battle against Jarvis."
-  puts "#{@name}, you have a Submarine and Cruiser."
-  puts @line
-  puts "Please choose 3 coordinates to place your Cruiser.\ne.g. A1,A2,A3"
   puts "========#{@name}'s board========"
   puts @user_board.render
   puts @line
+  puts "Prepare for battle against Jarvis."
+  puts @line
+  puts "#{@name}, you have a Submarine and Cruiser."
+  puts @line
+  puts "Please choose 3 coordinates to place your Cruiser.\ne.g. A1,A2,A3"
+  puts @line
 
   ship_coordinates = gets.chomp.upcase.split(",")
-  until ship_coordinates.all? { |coord| @user_board.validate_coordinate?(coord) } && @user_board.valid_placement?(@cruiser, ship_coordinates)
+  until @user_board.valid_placement?(@cruiser, ship_coordinates)
      puts "Invalid coordinates, please try again."
      ship_coordinates = gets.chomp.upcase.split(",")
   end
@@ -63,7 +78,7 @@ if intro.empty?
   puts @line
 
   ship_coordinates = gets.chomp.upcase.split(",")
-  until ship_coordinates.all? { |coord| @user_board.validate_coordinate?(coord) } && @user_board.valid_placement?(@submarine, ship_coordinates)
+  until @user_board.valid_placement?(@submarine, ship_coordinates)
      puts "Invalid coordinates, please try again."
      ship_coordinates = gets.chomp.upcase.split(",")
   end
@@ -74,16 +89,10 @@ if intro.empty?
   puts "========#{@name}'s board========"
   puts @user_board.render(true)
   puts @line
-
   puts "Jarvis has placed ships."
-  puts "Pick a coordinate to fire upon."
-  @ship_placer.generate_coordinates_cruiser(@cpu_board, @board_size, @cruiser)
-  @ship_placer.generate_coordinates_sub(@cpu_board, @board_size, @submarine)
-
-  # puts @cpu_board.render(true)
-
   puts @line
-
+  @ship_placer.generate_coordinates_cruiser(@cpu_board, @board_size, @cpu_cruiser)
+  @ship_placer.generate_coordinates_sub(@cpu_board, @board_size, @cpu_submarine)
 
   def player_turn
     shot = gets.chomp.upcase
@@ -104,13 +113,28 @@ if intro.empty?
     end
     @user_board.cells[cpu_shot].fire_upon
     puts "========Jarvis's board========"
-    puts @cpu_board.render(true)
-    puts "Pick another coordinate to fire upon."
+    puts @cpu_board.render
+    puts @line
+    puts "Enter a coordinate on Jarvis' board to fire upon."
+    puts @line
   end
 
   until @user_board.all_ships_sunk? || @cpu_board.all_ships_sunk?
     cpu_turn
     player_turn
   end
-  puts "GAME OVER!"
+
+  puts @line
+
+  if @user_board.all_ships_sunk?
+    puts "Jarvis has sunk all your ships :("
+  elsif @cpu_board.all_ships_sunk?
+    puts "Congradulations #{@name}, you defeated Jarvis!"
+  end
+
+  puts @line
+  sleep(5)
+  main_menu
 end
+
+main_menu
